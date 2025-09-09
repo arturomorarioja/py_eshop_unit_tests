@@ -21,8 +21,6 @@ class TestEshop():
         (800.01, 0.1),      # Partition 800-MAX DOUBLE: lower boundary value
         (800.02, 0.1),
         (900.00, 0.1),
-        ("900", 0.1),       # Edge case: implies string to float conversion
-        ("900.01", 0.1)     # Edge case: implies string to float conversion with decimals
     ])
     def test_eshop_discount_passes(self, amount, discount):
         assert calculate_discount(amount) == discount
@@ -30,6 +28,13 @@ class TestEshop():
     #
     # Negative testing
     #     
+
+    @pytest.mark.parametrize('amount, discount', [
+        ("900", 0.1),       # Edge case: implies string to float conversion
+        ("900.01", 0.1)     # Edge case: implies string to float conversion with decimals
+    ])
+    def test_eshop_discount_passes(self, amount, discount):
+        assert calculate_discount(amount) == discount
 
     def test_eshop_wrong_data_type_fails(self):
         with pytest.raises(ValueError) as error_info:
