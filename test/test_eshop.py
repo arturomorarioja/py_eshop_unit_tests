@@ -8,25 +8,38 @@ class TestEshop():
     # 
 
     @pytest.mark.parametrize('amount, discount', [
-        (0.0, 0.0),         # Partition 0-300: lower boundary value
-        (0.01, 0.0),
-        (150.00, 0.0),
+        
+        # Partition MIN DOUBLE- -0.01
+        (-0.02, 0.0),       
+        (-0.01, 0.0),       # upper boundary value
+        
+        # Partition 0
+        (0.0, 0.0),         # lower and upper boundary value
+        
+        # Partition 0.01-300
+        (0.01, 0.0),        # lower boundary value
+        (0.02, 0.0),
+        (150.00, 0.0),      # middle value
         (299.99, 0.0),
-        (300.00, 0.0),      # Partition 0-300: upper boundary value
-        (300.01, 0.05),     # Partition 300.01-800: lower boundary value
+        (300.00, 0.0),      # upper boundary value
+
+        # Partition 300.01-800
+        (300.01, 0.05),     # lower boundary value
         (300.02, 0.05),
-        (550.00, 0.05),
+        (550.00, 0.05),     # middle value
         (799.99, 0.05),
-        (800.00, 0.05),     # Partition 300.01-800: upper boundary value
-        (800.01, 0.1),      # Partition 800-MAX DOUBLE: lower boundary value
+        (800.00, 0.05),     # upper boundary value
+
+        # Partition 800.01-MAX DOUBLE
+        (800.01, 0.1),      # lower boundary value
         (800.02, 0.1),
-        (900.00, 0.1),
+        (900.00, 0.1),      # middle value
     ])
     def test_eshop_discount_passes(self, amount, discount):
         assert calculate_discount(amount) == discount
 
     #
-    # Negative testing
+    # Negative testing (edge cases)
     #     
 
     @pytest.mark.parametrize('amount, discount', [
